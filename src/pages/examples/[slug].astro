@@ -1,0 +1,167 @@
+---
+import { withBase } from '../../utils/urls';
+import Layout from '../../layouts/Layout.astro';
+import Icon from '../../components/Icon.astro';
+import FinalCTA from '../../components/FinalCTA.astro';
+import SampleGallery from '../../components/SampleGallery.astro';
+import { samples } from '../../data/site';
+export function getStaticPaths() {
+  return samples.map((sample) => ({ params: { slug: sample.slug }, props: { sample } }));
+}
+const { sample } = Astro.props;
+---
+
+<Layout title={sample.title.replace('\n', ' ')}>
+  <section data-review-id="D1" data-review-title="샘플 소개" class="detail-intro section-dark">
+    <div class="container">
+      <a href={withBase('/#work')} class="back-link">
+        ← 작업물 목록으로
+      </a>
+      <div class="detail-title-row">
+        <div>
+          <span class="eyebrow">{sample.category}</span>
+          <h1>
+            {sample.title.split('\n').map((line) => (
+              <span>{line}</span>
+            ))}
+          </h1>
+        </div>
+        <p>{sample.subtitle}</p>
+      </div>
+      <div class="detail-meta">
+        <span class="pill-lime">자체 제작 샘플</span>
+        <span>기획·디자인·카피라이팅</span>
+        <div class="tag-row">
+          {sample.tags.map((tag) => (
+            <span>{tag}</span>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+  <section
+    class="section section-light gallery-section"
+    data-review-id="D2"
+    data-review-title="완성 게시물"
+  >
+    <div class="container">
+      <SampleGallery slides={sample.slides} type={sample.type} />
+    </div>
+  </section>
+  <section class="section section-light">
+    <div class="container">
+      <div data-review-id="D3" data-review-title="제작 의도" class="detail-context">
+        <article data-reveal>
+          <span class="eyebrow">THE BRIEF</span>
+          <h2>무엇을 보여줄까.</h2>
+          <p>{sample.challenge}</p>
+        </article>
+        <article data-reveal>
+          <span class="eyebrow">THE APPROACH</span>
+          <h2>어떻게 만들까.</h2>
+          <p>{sample.approach}</p>
+        </article>
+      </div>
+      <div
+        data-review-id="D4"
+        data-review-title="제작 노트"
+        class="detail-process"
+        data-tabs
+        data-reveal
+      >
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">BEHIND THE CONTENT</span>
+            <h2>제작 노트</h2>
+          </div>
+        </div>
+        <div role="tablist" class="tab-list detail-tab-list" aria-label="콘텐츠 제작 과정">
+          <button
+            role="tab"
+            id="example-tab-source"
+            aria-controls="example-source"
+            aria-selected="true"
+          >
+            01. 자료
+          </button>
+          <button
+            role="tab"
+            id="example-tab-plan"
+            aria-controls="example-plan"
+            aria-selected="false"
+            tabindex="-1"
+          >
+            02. 기획
+          </button>
+          <button
+            role="tab"
+            id="example-tab-final"
+            aria-controls="example-final"
+            aria-selected="false"
+            tabindex="-1"
+          >
+            03. 완성 문구
+          </button>
+        </div>
+        <div role="tabpanel" id="example-source" aria-labelledby="example-tab-source" tabindex="0">
+          <span class="subtle-label">작업 설정</span>
+          <p>{sample.source}</p>
+        </div>
+        <div
+          role="tabpanel"
+          id="example-plan"
+          aria-labelledby="example-tab-plan"
+          hidden
+          tabindex="0"
+        >
+          <span class="subtle-label">게시물 구성</span>
+          <p>{sample.plan}</p>
+        </div>
+        <div
+          role="tabpanel"
+          id="example-final"
+          aria-labelledby="example-tab-final"
+          hidden
+          tabindex="0"
+        >
+          <span class="subtle-label">게시물 본문</span>
+          <p class="sample-quote">“{sample.final}”</p>
+        </div>
+      </div>
+      <div data-review-id="D5" data-review-title="제작 범위" class="detail-roles">
+        <article>
+          <span class="eyebrow">OUR PART</span>
+          <h3>제작한 내용</h3>
+          <ul>
+            {sample.ourRole.map((item) => (
+              <li>
+                <Icon name="check" />
+                {item}
+              </li>
+            ))}
+          </ul>
+        </article>
+        <article>
+          <span class="eyebrow">YOUR PART</span>
+          <h3>실제 제작 시 확인할 것</h3>
+          <ul>
+            {sample.ownerRole.map((item) => (
+              <li>
+                <Icon name="check" />
+                {item}
+              </li>
+            ))}
+          </ul>
+        </article>
+      </div>
+      <div class="detail-disclaimer review-only">
+        <strong>이 페이지에는 성과 수치를 넣지 않았습니다.</strong>
+        <p>
+          제작 방향을 확인하기 위한 예시입니다. 실제 운영 사례는 수행 사실·공개 동의를 확인한 후
+          별도로 소개하며, 성과는 자료로 검증된 범위만 표시할 예정입니다.
+        </p>
+      </div>
+    </div>
+  </section>
+  <FinalCTA />
+</Layout>

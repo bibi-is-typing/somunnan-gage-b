@@ -1,0 +1,38 @@
+---
+interface Props {
+  name?: 'arrow' | 'spark' | 'check' | 'megaphone' | 'plus';
+  class?: string;
+}
+const { name = 'arrow', class: className = '' } = Astro.props;
+---
+
+<svg
+  class={className}
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.7"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+>
+  {name === 'arrow' && (
+    <>
+      <path d="M5 12h14M13 6l6 6-6 6" />
+    </>
+  )}
+  {name === 'spark' && (
+    <>
+      <path d="M12 2l2.6 6.8L22 12l-7.4 3.2L12 22l-2.6-6.8L2 12l7.4-3.2L12 2Z" />
+    </>
+  )}
+  {name === 'check' && <path d="m5 12 4 4L19 6" />}
+  {name === 'megaphone' && (
+    <>
+      <path d="M3 9h5l11-5v16L8 15H3V9ZM8 15l2 6h4l-2-4M22 9v6" />
+    </>
+  )}
+  {name === 'plus' && <path d="M12 5v14M5 12h14" />}
+</svg>

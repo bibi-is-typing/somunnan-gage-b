@@ -1,0 +1,29 @@
+---
+import { withBase } from '../utils/urls';
+import Icon from './Icon.astro';
+---
+
+<section
+  data-review-id="S12"
+  data-review-title="마지막 상담 안내"
+  class="final-cta"
+  aria-labelledby="final-heading"
+>
+  <div class="container final-inner">
+    <div data-reveal>
+      <span class="eyebrow">CONTACT</span>
+      <h2 id="final-heading">
+        가게 홍보,
+        <br />
+        혼자 고민하지 마세요.
+      </h2>
+      <p>업종과 현재 고민을 알려주시면 상담할 내용을 확인할 수 있어요.</p>
+      <a class="button button-black" href={withBase('/diagnosis/')}>
+        상담 문의하기 <Icon />
+      </a>
+    </div>
+    <div class="cta-symbol" aria-hidden="true">
+      <Icon name="spark" />
+    </div>
+  </div>
+</section>

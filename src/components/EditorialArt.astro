@@ -1,0 +1,32 @@
+---
+interface Props {
+  compact?: boolean;
+}
+const { compact = false } = Astro.props;
+---
+
+<div class:list={['editorial-art', { compact }]} aria-label="전문 서비스 안내 카드 디자인 샘플">
+  <div class="editorial-grid" aria-hidden="true"></div>
+  <div class="paper paper-back" aria-hidden="true"></div>
+  <div class="paper paper-front">
+    <div class="paper-meta">
+      처음 만나는 전문 서비스 <span>Q&amp;A</span>
+    </div>
+    <div class="paper-title">
+      좋은 상담은
+      <br />
+      <em>좋은 질문</em>에서
+      <br />
+      시작됩니다<span class="paper-dot">.</span>
+    </div>
+    <div class="paper-bottom">
+      <span>
+        처음 방문하는 분을 위한
+        <br />
+        작은 안내서
+      </span>
+      <span aria-hidden="true">↗</span>
+    </div>
+  </div>
+  <span class="art-stamp">읽기 쉬운 전문성</span>
+</div>

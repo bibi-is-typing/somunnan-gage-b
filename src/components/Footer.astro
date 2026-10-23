@@ -1,0 +1,32 @@
+---
+import { withBase } from '../utils/urls';
+import Icon from './Icon.astro';
+---
+
+<footer data-review-id="S13" data-review-title="푸터" class="site-footer">
+  <div class="container footer-top">
+    <a class="brand" href={withBase('/')}>
+      <span class="brand-symbol">
+        <Icon name="megaphone" />
+      </span>
+      소문난 가게.
+    </a>
+    <p>
+      사장님은 장사에.
+      <br />
+      우리는 가게 홍보에.
+    </p>
+    <a href="#top" class="to-top">
+      맨 위로 <span aria-hidden="true">↑</span>
+    </a>
+  </div>
+  <div class="container footer-bottom">
+    <p>
+      © 소문난 가게
+      <br />
+      <span class="review-only">사업자 정보·공식 연락처는 소유자 확인 후 반영합니다.</span>
+      <span>웹사이트 시안 · 서비스 내용은 협의 전입니다.</span>
+    </p>
+    <a href={withBase('/privacy/')}>개인정보 안내</a>
+  </div>
+</footer>

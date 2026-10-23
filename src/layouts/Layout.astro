@@ -1,0 +1,36 @@
+---
+import { withBase } from '../utils/urls';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../data/site';
+import '../styles/global.css';
+interface Props {
+  title?: string;
+  description?: string;
+  simple?: boolean;
+}
+const { title, description = site.description, simple = false } = Astro.props;
+---
+
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#141611" />
+    <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
+    <title>{title ? `${title} | 소문난 가게` : '소문난 가게 | 마케팅 상담과 콘텐츠 운영'}</title>
+  </head>
+  <body id="top">
+    <Header simple={simple} />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+    <script>
+      import '../scripts/site';
+    </script>
+  </body>
+</html>

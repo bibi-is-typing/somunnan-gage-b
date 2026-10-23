@@ -1,0 +1,201 @@
+---
+import { withBase } from '../../utils/urls';
+import Layout from '../../layouts/Layout.astro';
+import Icon from '../../components/Icon.astro';
+import { industries } from '../../data/site';
+---
+
+<Layout title="상담 문의하기" simple>
+  <section class="diagnosis-section section-light">
+    <div class="container diagnosis-grid">
+      <div data-review-id="F1" data-review-title="상담 안내" class="diagnosis-intro">
+        <span class="eyebrow">CONTACT</span>
+        <h1>
+          어떤 도움이
+          <br />
+          필요하신가요<span class="green">.</span>
+        </h1>
+        <p>업종과 지금 가장 어려운 점을 알려주세요.</p>
+        <div class="demo-callout">
+          <span class="pill-lime">미리보기</span>
+          <strong>현재는 접수 기능을 연결하지 않았습니다.</strong>
+          <p>
+            실제 정보 대신 테스트 내용을 입력해주세요. 입력한 내용은 저장·전송되지 않으며,
+            담당자에게 접수되지 않습니다.
+          </p>
+        </div>
+        <div class="diagnosis-next">
+          <h2>상담에서 확인할 내용</h2>
+          <ol>
+            <li>
+              <span>01</span> 현재 운영하는 채널과 고객
+            </li>
+            <li>
+              <span>02</span> 맡기고 싶은 작업과 제작물
+            </li>
+            <li>
+              <span>03</span> 작업 일정과 비용
+            </li>
+          </ol>
+        </div>
+      </div>
+      <form
+        data-review-id="F2"
+        data-review-title="상담 폼"
+        id="diagnosis-form"
+        class="diagnosis-form"
+        novalidate
+      >
+        <div class="form-heading">
+          <h2>우리 가게 기본 정보</h2>
+          <span>
+            <i aria-hidden="true">*</i> 필수 항목
+          </span>
+        </div>
+        <div id="form-error-summary" class="form-error-summary" role="alert" hidden>
+          입력 내용을 확인해주세요.
+        </div>
+        <div class="field">
+          <label for="business">
+            상호명 <span aria-hidden="true">*</span>
+          </label>
+          <input
+            id="business"
+            name="business"
+            type="text"
+            placeholder="예: 테스트 가게 / 개업 준비 중"
+            maxlength="80"
+            autocomplete="off"
+            required
+            aria-describedby="business-error"
+          />
+          <p class="field-error" id="business-error" hidden></p>
+        </div>
+        <div class="field">
+          <label for="industry">
+            업종 <span aria-hidden="true">*</span>
+          </label>
+          <select id="industry" name="industry" required aria-describedby="industry-error">
+            <option value="">업종을 선택해주세요</option>
+            {industries.map((item) => (
+              <option value={item.id}>{item.label}</option>
+            ))}
+          </select>
+          <p class="field-error" id="industry-error" hidden></p>
+        </div>
+        <div class="field">
+          <label for="contact">
+            연락처 <span aria-hidden="true">*</span>
+          </label>
+          <input
+            id="contact"
+            name="contact"
+            type="tel"
+            inputmode="tel"
+            autocomplete="off"
+            placeholder="테스트 예시: 010-0000-0000"
+            maxlength="20"
+            required
+            aria-describedby="contact-hint contact-error"
+          />
+          <p class="field-hint" id="contact-hint">
+            실제 연락처 대신 테스트 번호를 입력해주세요.
+          </p>
+          <p class="field-error" id="contact-error" hidden></p>
+        </div>
+        <fieldset class="help-fieldset">
+          <legend>
+            어떤 도움이 필요한가요? <span>선택</span>
+          </legend>
+          <div class="radio-options">
+            <label>
+              <input type="radio" name="help" value="consulting" />
+              <span>방향 상담</span>
+            </label>
+            <label>
+              <input type="radio" name="help" value="management" />
+              <span>운영 대행</span>
+            </label>
+            <label>
+              <input type="radio" name="help" value="unknown" checked />
+              <span>아직 모르겠어요</span>
+            </label>
+          </div>
+        </fieldset>
+        <details class="optional-fields">
+          <summary>
+            가게 정보를 조금 더 알려주실래요?{' '}
+            <span>
+              선택 <Icon name="plus" />
+            </span>
+          </summary>
+          <div class="optional-inner">
+            <div class="field">
+              <label for="region">지역</label>
+              <input
+                id="region"
+                name="region"
+                placeholder="예: 서울 마포구"
+                maxlength="100"
+                autocomplete="off"
+              />
+            </div>
+            <div class="field">
+              <label for="channel">운영 채널 주소</label>
+              <input
+                id="channel"
+                name="channel"
+                type="url"
+                placeholder="https://example.com"
+                maxlength="300"
+                aria-describedby="channel-error"
+              />
+              <p class="field-error" id="channel-error" hidden></p>
+            </div>
+            <div class="field">
+              <label for="concern">현재 가장 고민되는 점</label>
+              <textarea
+                id="concern"
+                name="concern"
+                rows="4"
+                maxlength="1000"
+                placeholder="예: 꾸준히 게시하기가 어려워요."
+              ></textarea>
+            </div>
+          </div>
+        </details>
+        <div class="consent-field">
+          <label class="checkbox-label">
+            <input
+              type="checkbox"
+              id="demo-consent"
+              name="demo-consent"
+              required
+              aria-describedby="demo-consent-error"
+            />
+            <span>
+              입력 내용이 <strong>전송되지 않는 미리보기</strong>임을 확인했습니다.{' '}
+              <span class="required">*</span>
+            </span>
+          </label>
+          <p class="field-error" id="demo-consent-error" hidden></p>
+          <a href={withBase('/privacy/')} target="_blank" rel="noopener">
+            현재 개인정보 안내 보기 <span class="sr-only">(새 탭)</span> ↗
+          </a>
+        </div>
+        <button type="submit" class="button button-black form-submit" disabled>
+          <span data-submit-label>작성 내용 확인하기</span>
+          <Icon />
+        </button>
+        <p class="submit-note" id="submit-status" aria-live="polite">
+          정보는 저장·전송되지 않습니다.
+        </p>
+        <noscript>
+          <p class="form-error-summary">
+            데모 폼을 체험하려면 브라우저의 JavaScript를 활성화해주세요.
+          </p>
+        </noscript>
+      </form>
+    </div>
+  </section>
+</Layout>

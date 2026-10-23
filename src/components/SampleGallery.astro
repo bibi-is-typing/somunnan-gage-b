@@ -1,0 +1,105 @@
+---
+import { Image } from 'astro:assets';
+import cafe from '../assets/cafe-concept.png';
+interface Props {
+  slides: { kicker: string; title: string; body: string; style: string }[];
+  type: string;
+}
+const { slides, type } = Astro.props;
+---
+
+<div class="sample-gallery" data-gallery>
+  <div class="gallery-toolbar">
+    <div>
+      <span class="eyebrow">DESIGNED TO POST</span>
+      <h2>게시물 미리보기</h2>
+    </div>
+    <div class="gallery-controls">
+      <button type="button" data-gallery-prev aria-label="이전 게시물">
+        ←
+      </button>
+      <span data-gallery-count aria-live="polite">
+        1 / {slides.length}
+      </span>
+      <button type="button" data-gallery-next aria-label="다음 게시물">
+        →
+      </button>
+    </div>
+  </div>
+  <div class="gallery-stage">
+    {slides.map((slide, i) => (
+      <figure class:list={['post-design', slide.style]} data-gallery-slide hidden={i !== 0}>
+        {type === 'photo' && slide.style !== 'cafe-three' && (
+          <Image
+            src={cafe}
+            alt="AI로 제작한 카페 콘셉트 사진"
+            width={900}
+            height={900}
+            format="webp"
+            loading={i === 0 ? 'eager' : 'lazy'}
+          />
+        )}
+        <div class="post-layout">
+          <span class="post-kicker">{slide.kicker}</span>
+          <h3>
+            {slide.title.split('\n').map((line) => (
+              <span>{line}</span>
+            ))}
+          </h3>
+          <p>
+            {slide.body.split('\n').map((line) => (
+              <span>{line}</span>
+            ))}
+          </p>
+          <div class="post-bottom">
+            <span>{type === 'photo' ? 'OHU COFFEE' : '처음 상담 안내'}</span>
+            <span>0{i + 1}</span>
+          </div>
+        </div>
+        {slide.style === 'cafe-three' && (
+          <svg
+            class="coffee-line"
+            viewBox="0 0 200 180"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <path d="M40 62h105v48c0 26-105 26-105 0V62Zm105 3c49-10 49 51-3 40M26 140c30 20 110 20 139 0M73 41c-20-24 20-18 0-39M108 41c-20-24 20-18 0-39" />
+          </svg>
+        )}
+        {type === 'editorial' && (
+          <span class="post-index-art" aria-hidden="true">
+            {i === 0 ? '?' : `0${i}`}
+          </span>
+        )}
+      </figure>
+    ))}
+    <div class="gallery-caption">
+      <span class="pill-lime">자체 제작 샘플</span>
+      <h3>{type === 'photo' ? '가상 카페 ‘오후의 잔’' : '첫 상담을 위한 안내 카드'}</h3>
+      <p>
+        {type === 'photo'
+          ? '사진 중심의 게시물 두 장과 그래픽 포스터 한 장입니다. 화면의 화살표로 넘겨보세요.'
+          : '표지, 준비할 내용, 확인할 사항으로 구성했습니다. 세 장을 이어 읽으면 상담 전에 필요한 내용을 알 수 있습니다.'}
+      </p>
+      <div class="gallery-thumbnails" aria-label="게시물 선택">
+        {slides.map((_, i) => (
+          <button
+            type="button"
+            data-gallery-index={i}
+            aria-label={`${i + 1}번 게시물 보기`}
+            aria-pressed={i === 0 ? 'true' : 'false'}
+          >
+            0{i + 1}
+          </button>
+        ))}
+      </div>
+      <small>
+        {type === 'photo'
+          ? '가상 브랜드·AI 이미지로 제작했습니다. 실제 고객 사례가 아닙니다.'
+          : '특정 고객사의 작업이나 실제 상담 조건을 나타내지 않습니다.'}
+      </small>
+    </div>
+  </div>
+</div>
