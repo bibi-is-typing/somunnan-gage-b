@@ -5887,3 +5887,74 @@ h2 {
     width: 150px;
   }
 }
+
+/* ── 상담 신청: 실제 접수용 동의 영역 (2026-10-26) ── */
+.intake-callout a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.consent-detail {
+  margin: 6px 0 0 25px;
+  font-size: 10px;
+  color: #7e8a6c;
+}
+.consent-detail summary {
+  display: inline-block;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  list-style: none;
+}
+.consent-detail summary::-webkit-details-marker {
+  display: none;
+}
+.consent-detail dl {
+  margin: 10px 0 0;
+  padding: 12px 14px;
+  border: 1px solid #dfe4d4;
+  border-radius: 5px;
+  background: #fbfbf4;
+  display: grid;
+  gap: 8px;
+}
+.consent-detail dl > div {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: 10px;
+  line-height: 1.75;
+}
+.consent-detail dt {
+  color: #5d6b49;
+  font-weight: 650;
+}
+.consent-detail dd {
+  margin: 0;
+}
+.consent-detail > p {
+  margin-top: 8px;
+  line-height: 1.75;
+}
+.consent-optional {
+  margin-top: 14px;
+}
+.consent-field > a {
+  margin-top: 14px;
+}
+.hp-field {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+.submit-error {
+  color: #9f3f2b;
+}
+.submit-error a {
+  color: inherit;
+  text-decoration: underline;
+}
+.consent-field > .field-error {
+  margin-left: 25px;
+}

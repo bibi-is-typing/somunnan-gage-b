@@ -2,25 +2,38 @@
 import { withBase } from '../../utils/urls';
 import Layout from '../../layouts/Layout.astro';
 import Icon from '../../components/Icon.astro';
+
+const live = !!import.meta.env.PUBLIC_INTAKE_ENDPOINT;
 ---
 
-<Layout title="진단 데모 안내" simple>
+<Layout title={live ? '상담 신청 안내' : '진단 데모 안내'} simple>
   <section class="status-page section-light">
     <div class="container status-inner">
       <div class="status-icon">
         <Icon name="check" />
       </div>
-      <span class="eyebrow">LOCAL PREVIEW · DEMO</span>
-      <h1 data-complete-heading>
-        상담 문의 화면을
-        <br />
-        체험해보세요.
-      </h1>
-      <p data-complete-copy>
-        아직 실제 접수는 연결되지 않았습니다.
-        <br />
-        가게 정보를 입력하고 완료 화면을 확인할 수 있어요.
-      </p>
+      <span class="eyebrow">{live ? 'CONTACT' : 'LOCAL PREVIEW · DEMO'}</span>
+      {
+        live ? (
+          <>
+            <h1 data-complete-heading>상담 신청은 이렇게 진행돼요.</h1>
+            <p data-complete-copy>신청서를 남겨주시면 영업일 기준 1일 안에 연락드려요.</p>
+          </>
+        ) : (
+          <>
+            <h1 data-complete-heading>
+              상담 문의 화면을
+              <br />
+              체험해보세요.
+            </h1>
+            <p data-complete-copy>
+              아직 실제 접수는 연결되지 않았습니다.
+              <br />
+              가게 정보를 입력하고 완료 화면을 확인할 수 있어요.
+            </p>
+          </>
+        )
+      }
       <div class="completion-steps">
         <span>
           <b>01</b>정보 입력
@@ -29,13 +42,13 @@ import Icon from '../../components/Icon.astro';
           <b>02</b>입력 확인
         </span>
         <span>
-          <b>03</b>데모 완료
+          <b>03</b>{live ? '담당자 연락' : '데모 완료'}
         </span>
       </div>
-      <div class="status-notice">실제 신청 접수·정보 저장·담당자 연락은 이루어지지 않습니다.</div>
+      {!live && <div class="status-notice">실제 신청 접수·정보 저장·담당자 연락은 이루어지지 않습니다.</div>}
       <div class="status-buttons">
         <a class="button button-black" href={withBase('/diagnosis/')} data-complete-primary>
-          데모 신청하기 <Icon />
+          {live ? '상담 신청하기' : '데모 신청하기'} <Icon />
         </a>
         <a class="button button-outline" href={withBase('/#work')}>
           작업물 더 보기

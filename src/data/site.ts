@@ -98,7 +98,8 @@ export const business = {
   name: '파테라',
   ceo: '이준영',
   regNo: '559-27-01963',
-  email: 'contact@example.com',
+  // 2026-10-26 도메인·메일 연결 후 사용 (받은 메일은 cor.patera@gmail.com 으로 전달)
+  email: 'contact@patera.biz',
 };
 
 // 업종별 자세히 보기. cat: pro(전문직) | shop(소상공인)

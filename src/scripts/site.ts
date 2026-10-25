@@ -1,5 +1,6 @@
 import { withBase } from '../utils/urls';
-import { track } from './analytics';
+import { recordConfirmedLead, track } from './analytics';
+import { submitIntake } from './intake';
 import './review';
 const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const revealItems = document.querySelectorAll<HTMLElement>('[data-reveal]');
@@ -107,17 +108,18 @@ if (form) {
   const optionalFields = form.querySelector<HTMLDetailsElement>('.optional-fields')!;
   const button = form.querySelector<HTMLButtonElement>('[type="submit"]')!;
   const status = form.querySelector<HTMLElement>('#submit-status')!;
+  const live = form.dataset.live === 'true';
   const context = () => ({
     industry: industry.value || 'unspecified',
     help: form.querySelector<HTMLInputElement>('input[name=help]:checked')?.value || 'unknown',
     form_type: 'consultation',
-    mode: 'demo',
+    mode: live ? 'live' : 'demo',
   });
   form.addEventListener('input', () => track('diagnosis_started', context(), true), { once: true });
   const label = form.querySelector<HTMLElement>('[data-submit-label]')!;
   button.disabled = false;
   type Field = HTMLInputElement | HTMLSelectElement;
-  const fields = ['business', 'industry', 'contact', 'channel', 'demo-consent'];
+  const fields = ['business', 'industry', 'contact', 'channel', 'privacy-consent'];
   const validate = (id: string) => {
     const field = form.querySelector<Field>(`#${id}`)!;
     const error = form.querySelector<HTMLElement>(`#${id}-error`)!;
@@ -136,8 +138,8 @@ if (form) {
         optionalFields.open = true;
       }
     }
-    if (id === 'demo-consent' && !(field as HTMLInputElement).checked)
-      message = '실제 접수가 없는 데모라는 안내를 확인해주세요.';
+    if (id === 'privacy-consent' && !(field as HTMLInputElement).checked)
+      message = '상담 신청을 위해 개인정보 수집·이용에 동의해주세요.';
     field.setAttribute('aria-invalid', String(!!message));
     error.textContent = message;
     error.hidden = !message;
@@ -163,59 +165,107 @@ if (form) {
       return;
     }
     track('diagnosis_completed', context(), true);
+    const goComplete = (kind: 'demo' | 'live') => {
+      try {
+        sessionStorage.setItem(completionKey, `${kind}:${Date.now()}`);
+      } catch {
+        /* 완료 화면은 일반 안내로 보입니다. */
+      }
+      form.reset();
+      window.location.assign(
+        new URLSearchParams(location.search).get('review') === '1'
+          ? withBase('/diagnosis/complete/?review=1')
+          : withBase('/diagnosis/complete/'),
+      );
+    };
+
+    if (live) {
+      // 실제 접수: 시트에 저장됐다는 응답을 받은 뒤에만 완료로 처리합니다.
+      button.disabled = true;
+      label.textContent = '신청 보내는 중…';
+      status.classList.remove('submit-error');
+      status.textContent = '잠시만 기다려주세요.';
+      const value = (name: string) =>
+        (form.elements.namedItem(name) as HTMLInputElement | null)?.value?.trim() ?? '';
+      submitIntake({
+        business: value('business'),
+        industry: industry.value,
+        industryLabel: industry.selectedOptions[0]?.textContent?.trim() ?? '',
+        contact: value('contact'),
+        help: form.querySelector<HTMLInputElement>('input[name=help]:checked')?.value || 'unknown',
+        region: value('region'),
+        channel: value('channel'),
+        concern: (form.elements.namedItem('concern') as HTMLTextAreaElement | null)?.value.trim() ?? '',
+        privacyConsent: 'Y',
+        marketingConsent: (form.elements.namedItem('marketing-consent') as HTMLInputElement | null)
+          ?.checked
+          ? 'Y'
+          : 'N',
+        consentVersion: form.dataset.consentVersion || '',
+        website: value('website'),
+      })
+        .then((receipt) => {
+          recordConfirmedLead({ id: receipt.id, saved: true }, context());
+          goComplete('live');
+        })
+        .catch(() => {
+          button.disabled = false;
+          label.textContent = '다시 보내기';
+          status.classList.add('submit-error');
+          const email = document.querySelector<HTMLAnchorElement>('.intake-callout a')?.textContent || '';
+          status.textContent = `전송이 잘 안 됐어요. 입력하신 내용은 그대로 있으니 다시 보내주시거나, ${email}로 메일 주세요.`;
+        });
+      return;
+    }
+
+    // 미리보기: 입력값을 어디에도 보내거나 저장하지 않습니다.
     button.disabled = true;
     label.textContent = '데모 화면으로 이동 중';
     status.textContent = '입력 내용을 전송하지 않고 완료 화면을 열고 있습니다.';
-    // No FormData, network request, console logging or storage of field values.
     window.setTimeout(
       () => {
-        try {
-          sessionStorage.setItem(completionKey, String(Date.now()));
-        } catch {
-          button.disabled = false;
-          label.textContent = '작성 내용 확인하기';
-          status.textContent =
-            '입력 확인을 마쳤습니다. 브라우저 저장 기능이 꺼져 있어 완료 화면으로 이동할 수 없습니다. 정보는 접수되지 않았습니다.';
-          return;
-        }
         track('diagnosis_demo_completed', context(), true);
-        form.reset();
-        window.location.assign(
-          new URLSearchParams(location.search).get('review') === '1'
-            ? withBase('/diagnosis/complete/?review=1')
-            : withBase('/diagnosis/complete/'),
-        );
+        goComplete('demo');
       },
       motion.matches ? 0 : 450,
     );
   });
   window.addEventListener('pageshow', () => {
     button.disabled = false;
-    label.textContent = '작성 내용 확인하기';
-    status.textContent = '정보는 저장·전송되지 않습니다.';
+    label.textContent = live ? '상담 신청하기' : '작성 내용 확인하기';
+    status.classList.remove('submit-error');
+    status.textContent = live
+      ? '신청 내용은 상담 연락에만 사용합니다.'
+      : '미리보기라 정보는 저장·전송되지 않습니다.';
   });
 }
 
 const completeHeading = document.querySelector<HTMLElement>('[data-complete-heading]');
 if (completeHeading) {
-  let completed = false;
+  let kind = '';
   try {
-    const timestamp = Number(sessionStorage.getItem(completionKey));
-    completed = timestamp > 0 && Date.now() >= timestamp && Date.now() - timestamp < 120000;
+    const [k, t] = (sessionStorage.getItem(completionKey) || '').split(':');
+    const timestamp = Number(t);
+    if (timestamp > 0 && Date.now() >= timestamp && Date.now() - timestamp < 120000) kind = k;
     sessionStorage.removeItem(completionKey);
   } catch {
-    /* Direct access falls back to the general demo explanation. */
+    /* 바로 들어오면 일반 안내가 보입니다. */
   }
-  if (completed) {
-    completeHeading.textContent = '작성 내용을 확인했어요.';
-    document.querySelector<HTMLElement>('[data-complete-copy]')!.textContent =
-      '입력부터 완료까지 체험해주셔서 감사합니다. 입력한 내용은 저장하거나 전송하지 않았습니다.';
-    const primary = document.querySelector<HTMLAnchorElement>('[data-complete-primary]')!;
+  const copy = document.querySelector<HTMLElement>('[data-complete-copy]')!;
+  const primary = document.querySelector<HTMLAnchorElement>('[data-complete-primary]')!;
+  const home =
+    new URLSearchParams(location.search).get('review') === '1' ? withBase('/?review=1') : withBase('/');
+  if (kind === 'live') {
+    completeHeading.textContent = '상담 신청이 접수됐어요.';
+    copy.textContent = '영업일 기준 1일 안에 남겨주신 연락처로 연락드릴게요.';
     primary.textContent = '홈으로 돌아가기 →';
-    primary.href =
-      new URLSearchParams(location.search).get('review') === '1'
-        ? withBase('/?review=1')
-        : withBase('/');
+    primary.href = home;
+  } else if (kind === 'demo') {
+    completeHeading.textContent = '작성 내용을 확인했어요.';
+    copy.textContent =
+      '입력부터 완료까지 체험해주셔서 감사합니다. 입력한 내용은 저장하거나 전송하지 않았습니다.';
+    primary.textContent = '홈으로 돌아가기 →';
+    primary.href = home;
   }
 }
 

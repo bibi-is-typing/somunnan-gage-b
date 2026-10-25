@@ -2,7 +2,13 @@
 import { withBase } from '../../utils/urls';
 import Layout from '../../layouts/Layout.astro';
 import Icon from '../../components/Icon.astro';
-import { industries } from '../../data/site';
+import { industries, business } from '../../data/site';
+import { privacy } from '../../data/privacy';
+
+// 접수 주소(Apps Script)가 있으면 실제 접수, 없으면 미리보기(전송 안 함)
+const live = !!import.meta.env.PUBLIC_INTAKE_ENDPOINT;
+const c = privacy.consultation;
+const m = privacy.marketing;
 ---
 
 <Layout title="상담 문의하기" simple>
@@ -16,14 +22,26 @@ import { industries } from '../../data/site';
           필요하신가요<span class="green">.</span>
         </h1>
         <p>업종과 지금 가장 어려운 점을 알려주세요.</p>
-        <div class="demo-callout">
-          <span class="pill-lime">미리보기</span>
-          <strong>현재는 접수 기능을 연결하지 않았습니다.</strong>
-          <p>
-            실제 정보 대신 테스트 내용을 입력해주세요. 입력한 내용은 저장·전송되지 않으며,
-            담당자에게 접수되지 않습니다.
-          </p>
-        </div>
+        {
+          live ? (
+            <div class="demo-callout intake-callout">
+              <strong>영업일 기준 1일 안에 연락드려요.</strong>
+              <p>
+                남겨주신 연락처로 직접 연락드립니다. 급하신 경우{' '}
+                <a href={`mailto:${business.email}`}>{business.email}</a>로 메일 주세요.
+              </p>
+            </div>
+          ) : (
+            <div class="demo-callout">
+              <span class="pill-lime">미리보기</span>
+              <strong>현재는 접수 기능을 연결하지 않았습니다.</strong>
+              <p>
+                실제 정보 대신 테스트 내용을 입력해주세요. 입력한 내용은 저장·전송되지 않으며,
+                담당자에게 접수되지 않습니다.
+              </p>
+            </div>
+          )
+        }
         <div class="diagnosis-next">
           <h2>상담에서 확인할 내용</h2>
           <ol>
@@ -44,6 +62,8 @@ import { industries } from '../../data/site';
         data-review-title="상담 폼"
         id="diagnosis-form"
         class="diagnosis-form"
+        data-live={live ? 'true' : 'false'}
+        data-consent-version={privacy.consentVersion}
         novalidate
       >
         <div class="form-heading">
@@ -93,13 +113,13 @@ import { industries } from '../../data/site';
             type="tel"
             inputmode="tel"
             autocomplete="off"
-            placeholder="테스트 예시: 010-0000-0000"
+            placeholder={live ? '010-0000-0000' : '테스트 예시: 010-0000-0000'}
             maxlength="20"
             required
             aria-describedby="contact-hint contact-error"
           />
           <p class="field-hint" id="contact-hint">
-            실제 연락처 대신 테스트 번호를 입력해주세요.
+            {live ? '휴대폰 또는 가게 전화번호를 적어주세요.' : '실제 연락처 대신 테스트 번호를 입력해주세요.'}
           </p>
           <p class="field-error" id="contact-error" hidden></p>
         </div>
@@ -168,27 +188,59 @@ import { industries } from '../../data/site';
           <label class="checkbox-label">
             <input
               type="checkbox"
-              id="demo-consent"
-              name="demo-consent"
+              id="privacy-consent"
+              name="privacy-consent"
               required
-              aria-describedby="demo-consent-error"
+              aria-describedby="privacy-consent-detail privacy-consent-error"
             />
             <span>
-              입력 내용이 <strong>전송되지 않는 미리보기</strong>임을 확인했습니다.{' '}
-              <span class="required">*</span>
+              <strong>[필수] 개인정보 수집·이용에 동의합니다.</strong>
             </span>
           </label>
-          <p class="field-error" id="demo-consent-error" hidden></p>
+          <details class="consent-detail" id="privacy-consent-detail">
+            <summary>내용 보기</summary>
+            <dl>
+              <div><dt>수집 항목</dt><dd>필수: {c.required.join(', ')}<br />선택: {c.optional.join(', ')}</dd></div>
+              <div><dt>이용 목적</dt><dd>{c.purpose}</dd></div>
+              <div><dt>보관 기간</dt><dd>{c.retention}</dd></div>
+            </dl>
+            <p>{c.refusal}</p>
+          </details>
+          <p class="field-error" id="privacy-consent-error" hidden></p>
+          {
+            m.enabled && (
+              <>
+                <label class="checkbox-label consent-optional">
+                  <input type="checkbox" id="marketing-consent" name="marketing-consent" />
+                  <span>[선택] 소식·이벤트 안내를 받겠습니다.</span>
+                </label>
+                <details class="consent-detail">
+                  <summary>내용 보기</summary>
+                  <dl>
+                    <div><dt>수집 항목</dt><dd>{m.items.join(', ')}</dd></div>
+                    <div><dt>이용 목적</dt><dd>{m.purpose}</dd></div>
+                    <div><dt>보관 기간</dt><dd>{m.retention}</dd></div>
+                  </dl>
+                  <p>{m.refusal}</p>
+                </details>
+              </>
+            )
+          }
           <a href={withBase('/privacy/')} target="_blank" rel="noopener">
-            현재 개인정보 안내 보기 <span class="sr-only">(새 탭)</span> ↗
+            개인정보처리방침 보기 <span class="sr-only">(새 탭)</span> ↗
           </a>
         </div>
+        <!-- 스팸 방지: 사람에게는 보이지 않는 칸. 채워져 있으면 봇으로 보고 접수하지 않습니다. -->
+        <div class="hp-field" aria-hidden="true">
+          <label for="website">웹사이트</label>
+          <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
+        </div>
         <button type="submit" class="button button-black form-submit" disabled>
-          <span data-submit-label>작성 내용 확인하기</span>
+          <span data-submit-label>{live ? '상담 신청하기' : '작성 내용 확인하기'}</span>
           <Icon />
         </button>
         <p class="submit-note" id="submit-status" aria-live="polite">
-          정보는 저장·전송되지 않습니다.
+          {live ? '신청 내용은 상담 연락에만 사용합니다.' : '미리보기라 정보는 저장·전송되지 않습니다.'}
         </p>
         <noscript>
           <p class="form-error-summary">

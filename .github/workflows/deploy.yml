@@ -32,6 +32,7 @@ jobs:
           SITE_URL: ${{ steps.pages.outputs.origin }}
           SITE_BASE_PATH: ${{ steps.pages.outputs.base_path }}
           PUBLIC_GA4_ID: ${{ vars.PUBLIC_GA4_ID }}
+          PUBLIC_INTAKE_ENDPOINT: ${{ vars.PUBLIC_INTAKE_ENDPOINT }}
       - uses: actions/upload-pages-artifact@v4
         with:
           path: dist
