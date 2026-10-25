@@ -58,6 +58,149 @@ export const industries = [
   },
 ];
 
+
+// 첫 화면 작업물. image에 public/works/ 안의 파일 경로를 넣으면 자리표시 대신 실제 작업물이 보입니다.
+// 예: image: 'works/youtube-01.jpg'. 비워두면 '작업물 준비 중' 자리표시가 보입니다.
+export const heroWorks = [
+  {
+    channel: 'youtube',
+    channelLabel: '유튜브 쇼츠',
+    title: '사장님이 새벽에\n가게 문 여는 이유',
+    image: '',
+    shape: 'vertical',
+  },
+  {
+    channel: 'instagram',
+    channelLabel: '인스타그램',
+    title: '오늘은,\n천천히 마셔요.',
+    image: 'cafe',
+    shape: 'square',
+  },
+  {
+    channel: 'blog',
+    channelLabel: '네이버 블로그',
+    title: '처음 상담 전에\n준비하면 좋은 것',
+    image: '',
+    shape: 'wide',
+  },
+];
+
+// 운영 채널. 각 플랫폼 공식 브랜드 자료에서 받은 로고 파일을 public/channels/ 에 넣고
+// logo에 경로를 적으면 (예: 'channels/youtube.svg') 아이콘 대신 공식 로고가 보입니다.
+export const channels = [
+  { id: 'youtube', label: '유튜브', logo: '' },
+  { id: 'instagram', label: '인스타그램', logo: '' },
+  { id: 'blog', label: '네이버 블로그', logo: '' },
+  { id: 'place', label: '네이버 플레이스', logo: '' },
+];
+
+export const business = {
+  name: '파테라',
+  ceo: '이준영',
+  regNo: '559-27-01963',
+  email: 'contact@example.com',
+};
+
+// 업종별 자세히 보기. cat: pro(전문직) | shop(소상공인)
+export const industryDetails = [
+  {
+    cat: 'pro', icon: 'home', title: '부동산 중개',
+    quote: '단지 정보는 제가 제일 잘 아는데, 그걸 알릴 방법이 없어요.',
+    how: ['단지·생활권 정보 블로그 연재', '매물 집 투어 숏폼 촬영·편집', '플레이스 사진·소식 최신화'],
+    channels: ['블로그', '숏폼', '플레이스'],
+  },
+  {
+    cat: 'pro', icon: 'receipt', title: '세무·회계사무소',
+    quote: '전문성은 자신 있는데, 고객이 우리를 먼저 찾게 하긴 어렵네요.',
+    how: ['1분 절세 팁 숏폼 시리즈', '업종별 세무 일정·체크리스트 글', '상담 문의로 이어지는 동선 정리'],
+    channels: ['숏폼', '블로그', '인스타그램'],
+  },
+  {
+    cat: 'pro', icon: 'scale', title: '법률사무소',
+    quote: '광고 규정이 까다로워서 뭘 올려도 되는지부터 걱정돼요.',
+    how: ['사건 유형별 기초 정보 콘텐츠', '자주 받는 질문을 짧은 영상으로', '모든 콘텐츠는 발행 전 변호사 확인'],
+    channels: ['블로그', '숏폼'],
+    rule: '변호사 광고 관련 규정을 지키는 범위에서 운영합니다.',
+  },
+  {
+    cat: 'pro', icon: 'stethoscope', title: '병·의원·한의원',
+    quote: '진료 보느라 SNS는 엄두가 안 나요. 리뷰 답글도 밀려 있고요.',
+    how: ['진료 시간·위치·주차 등 안내 콘텐츠', '플레이스 정보 관리와 리뷰 답글', '원내 분위기·의료진 소개 영상'],
+    channels: ['플레이스', '리뷰', '숏폼'],
+    rule: '의료광고 심의 기준을 지키는 범위에서 운영합니다.',
+  },
+  {
+    cat: 'pro', icon: 'hammer', title: '인테리어·시공',
+    quote: '현장 끝나면 바로 다음 현장이라, 포트폴리오 정리를 못 해요.',
+    how: ['시공 전후 비교 숏폼', '현장별 시공 기록 블로그', '인스타 포트폴리오 피드 정리'],
+    channels: ['숏폼', '블로그', '인스타그램'],
+  },
+  {
+    cat: 'shop', icon: 'bowl', title: '음식점',
+    quote: '맛은 자신 있는데, 지나가는 사람만 들어와요.',
+    how: ['조리 과정·대표 메뉴 숏폼 촬영', '플레이스 메뉴 사진·소식 관리', '모든 리뷰에 사장님 답글'],
+    channels: ['숏폼', '플레이스', '리뷰'],
+  },
+  {
+    cat: 'shop', icon: 'cup', title: '카페·베이커리',
+    quote: '신메뉴를 내도 아는 사람만 알아요.',
+    how: ['신메뉴·굽는 과정 릴스', '인스타그램 피드·스토리 운영', '시즌 메뉴 소식 정리'],
+    channels: ['릴스', '인스타그램', '플레이스'],
+  },
+  {
+    cat: 'shop', icon: 'scissors', title: '미용실·네일·피부관리',
+    quote: '시술 사진은 쌓이는데 올릴 시간이 없어요.',
+    how: ['시술 전후 릴스 (고객 동의 후)', '디자이너별 포트폴리오 정리', '예약까지 이어지는 링크·안내'],
+    channels: ['릴스', '인스타그램', '플레이스'],
+  },
+  {
+    cat: 'shop', icon: 'dumbbell', title: '필라테스·헬스·요가',
+    quote: '체험 수업만 오면 등록하는데, 체험까지 오게 하는 게 어려워요.',
+    how: ['수업 분위기·강사 소개 영상', '체험 수업 안내 콘텐츠', '동네 소식 채널 운영'],
+    channels: ['숏폼', '인스타그램', '당근'],
+  },
+  {
+    cat: 'shop', icon: 'book', title: '학원·교습소',
+    quote: '학부모님들이 어디서 정보를 얻는지 모르겠어요.',
+    how: ['학부모 대상 교육 정보 블로그', '설명회·모집 안내 콘텐츠', '당근 비즈프로필·동네 소식'],
+    channels: ['블로그', '당근', '플레이스'],
+  },
+  {
+    cat: 'shop', icon: 'flower', title: '꽃집·공방·클래스',
+    quote: '만드는 과정이 제일 예쁜데, 찍을 손이 없어요.',
+    how: ['작업 과정 숏폼 촬영', '원데이 클래스 모집 안내', '기념일 시즌 맞춤 콘텐츠'],
+    channels: ['숏폼', '인스타그램', '블로그'],
+  },
+];
+
+
+// 작업물 모음. image에 public/works/ 안의 파일 경로를 넣으면 실제 작업물이 보입니다. 비워두면 '업로드 예정' 자리표시.
+export const portfolio = [
+  { channel: 'youtube', channelLabel: '유튜브 쇼츠', shape: 'vertical', image: '', title: '' },
+  { channel: 'instagram', channelLabel: '인스타그램 피드', shape: 'square', image: 'cafe', title: '오늘은,\n천천히 마셔요.' },
+  { channel: 'blog', channelLabel: '네이버 블로그', shape: 'wide', image: '', title: '' },
+  { channel: 'instagram', channelLabel: '인스타그램 릴스', shape: 'vertical', image: '', title: '' },
+  { channel: 'place', channelLabel: '네이버 플레이스', shape: 'square', image: '', title: '' },
+  { channel: 'blog', channelLabel: '카드뉴스', shape: 'square', image: '', title: '' },
+];
+
+// 첫 한 달 운영 (요금 영역)
+export const monthPlan = {
+  price: '월 30만원부터',
+  terms: '최소 1개월 · 채널과 작업량에 따라 견적',
+  includes: [
+    '채널 진단과 기본 세팅 (블로그·인스타그램·플레이스)',
+    '콘텐츠 기획·제작·게시',
+    '한 달 운영 보고',
+    '직접 운영 전환 시 세팅·교육',
+  ],
+  weeks: [
+    { label: '1주차', title: '진단과 세팅', text: '채널을 점검하고 기본 정보와 프로필을 정리합니다.' },
+    { label: '2~3주차', title: '제작과 게시', text: '주제를 기획하고 사진·영상·글을 만들어 확인 후 게시합니다.' },
+    { label: '4주차', title: '보고와 선택', text: '한 일과 반응을 정리하고, 다음 달 방향을 함께 정합니다.' },
+  ],
+};
+
 export const samples = [
   {
     slug: 'cafe-story',
@@ -164,15 +307,15 @@ export const steps = [
 export const plans = [
   {
     id: 'consulting',
-    label: '직접 운영할 계획이라면',
-    title: '마케팅 상담',
-    items: ['검색부터 문의까지 채널 점검', '콘텐츠 주제와 운영 방법 제안', '먼저 해야 할 일 안내'],
-    note: '상담 주제와 필요한 자료를 먼저 확인합니다.',
+    label: '마케팅 비용이 부담된다면',
+    title: '직접 배우기',
+    items: ['우리 가게 채널 점검과 우선순위', '맞춤 게시 주제와 한 달 캘린더', '스마트폰 촬영·편집, 글쓰기 방법', '리뷰 답글·플레이스 관리 요령'],
+    note: '배운 대로 운영하다가 바빠지면, 그때 맡기셔도 됩니다.',
   },
   {
     id: 'management',
-    label: '제작과 게시를 맡기고 싶다면',
-    title: '콘텐츠 운영',
+    label: '시간이 없다면',
+    title: '맡기기',
     items: ['채널에 맞는 콘텐츠 기획', '사진·글 제작과 게시', '작업 내역과 고객 반응 확인'],
     note: '촬영, 광고비, 제작 수량은 견적에서 각각 확인합니다.',
   },
@@ -184,9 +327,9 @@ export const faqs = [
       '운영 중인 채널 주소와 지금 가장 어려운 점을 알려주세요. 게시할 소재가 부족한지, 제작할 시간이 없는지부터 이야기해보면 좋습니다.',
   },
   {
-    question: '상담과 운영 대행은 어떻게 다른가요?',
+    question: '한 달 해보고 그만두면 어떻게 되나요?',
     answer:
-      '상담은 사장님이 직접 운영할 수 있도록 주제와 방법을 안내하는 서비스입니다. 운영 대행은 협의한 범위의 콘텐츠 제작과 게시를 맡기는 서비스입니다.',
+      '마지막 주에 그동안 만든 계정 세팅, 게시 캘린더, 촬영·글쓰기 방법, 리뷰 답글 예시를 정리해 넘겨드리고 직접 운영하는 방법을 알려드립니다. 그다음부터는 사장님이 직접 운영하시면 됩니다.',
   },
   {
     question: '문의할 때 어떤 내용을 알려드리면 되나요?',
@@ -196,6 +339,6 @@ export const faqs = [
   {
     question: '비용은 어떻게 확인하나요?',
     answer:
-      '상담만 필요한지, 제작과 게시까지 맡길지에 따라 달라집니다. 운영 채널, 제작 수량, 촬영 여부를 확인한 뒤 견적을 받는 방식입니다.',
+      '최소 1개월, 월 30만원부터 시작합니다. 운영할 채널, 제작 수량, 촬영 여부에 따라 견적이 달라지며, 광고비는 견적에서 따로 확인합니다.',
   },
 ];

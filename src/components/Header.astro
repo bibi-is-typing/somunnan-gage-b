@@ -18,7 +18,7 @@ const { simple = false } = Astro.props;
         <Icon name="megaphone" />
       </span>
       <span>
-        소문난 가게<span class="brand-period">.</span>
+        소문난 가게
       </span>
     </a>
     {simple ? (
@@ -28,10 +28,9 @@ const { simple = false } = Astro.props;
     ) : (
       <>
         <nav class="desktop-nav" aria-label="주 메뉴">
-          <a href={withBase('/#services')}>서비스</a>
+          <a href={withBase('/#industries')}>업종별 사례</a>
           <a href={withBase('/#work')}>작업물</a>
-          <a href={withBase('/#process')}>진행 방식</a>
-          <a href={withBase('/#pricing')}>요금·범위</a>
+          <a href={withBase('/#pricing')}>요금</a>
         </nav>
         <div class="header-actions">
           <a class="button button-small button-lime" href={withBase('/diagnosis/')}>
@@ -49,10 +48,9 @@ const { simple = false } = Astro.props;
           </button>
         </div>
         <nav id="mobile-menu" class="mobile-menu" aria-label="모바일 주 메뉴" hidden>
-          <a href={withBase('/#services')}>서비스</a>
+          <a href={withBase('/#industries')}>업종별 사례</a>
           <a href={withBase('/#work')}>작업물</a>
-          <a href={withBase('/#process')}>진행 방식</a>
-          <a href={withBase('/#pricing')}>요금·범위</a>
+          <a href={withBase('/#pricing')}>요금</a>
           <a href={withBase('/#faq')}>자주 묻는 질문</a>
         </nav>
       </>

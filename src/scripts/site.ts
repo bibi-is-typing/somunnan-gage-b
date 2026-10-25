@@ -241,3 +241,18 @@ document.querySelectorAll<HTMLElement>('[data-gallery]').forEach((gallery) => {
     ?.addEventListener('click', () => select(current + 1));
   selectors.forEach((button, i) => button.addEventListener('click', () => select(i)));
 });
+
+// 업종별 자세히 보기: 전체 / 전문직 / 소상공인 필터
+document.querySelectorAll<HTMLElement>('.v3-filter').forEach((group) => {
+  const buttons = [...group.querySelectorAll<HTMLButtonElement>('[data-filter]')];
+  const cards = [...document.querySelectorAll<HTMLElement>('.v3-card[data-cat]')];
+  buttons.forEach((button) => {
+    button.addEventListener('click', () => {
+      const filter = button.dataset.filter;
+      buttons.forEach((b) => b.setAttribute('aria-pressed', String(b === button)));
+      cards.forEach((card) => {
+        card.hidden = !(filter === 'all' || card.dataset.cat === filter);
+      });
+    });
+  });
+});

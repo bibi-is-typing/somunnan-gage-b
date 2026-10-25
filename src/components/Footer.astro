@@ -1,6 +1,7 @@
 ---
 import { withBase } from '../utils/urls';
 import Icon from './Icon.astro';
+import { business } from '../data/site';
 ---
 
 <footer data-review-id="S13" data-review-title="푸터" class="site-footer">
@@ -9,7 +10,7 @@ import Icon from './Icon.astro';
       <span class="brand-symbol">
         <Icon name="megaphone" />
       </span>
-      소문난 가게.
+      소문난 가게
     </a>
     <p>
       사장님은 장사에.
@@ -20,13 +21,19 @@ import Icon from './Icon.astro';
       맨 위로 <span aria-hidden="true">↑</span>
     </a>
   </div>
-  <div class="container footer-bottom">
-    <p>
-      © 소문난 가게
-      <br />
-      <span class="review-only">사업자 정보·공식 연락처는 소유자 확인 후 반영합니다.</span>
-      <span>웹사이트 시안 · 서비스 내용은 협의 전입니다.</span>
-    </p>
-    <a href={withBase('/privacy/')}>개인정보 안내</a>
+  <div class="container footer-bottom v6-footer-bottom">
+    <div class="v6-biz">
+      <dl>
+        <div><dt>상호명</dt><dd>{business.name}</dd></div>
+        <div><dt>대표자</dt><dd>{business.ceo}</dd></div>
+        <div><dt>사업자등록번호</dt><dd>{business.regNo}</dd></div>
+        <div><dt>이메일</dt><dd><a href={`mailto:${business.email}`}>{business.email}</a></dd></div>
+      </dl>
+      <p class="v6-copy">
+        © {new Date().getFullYear()} {business.name}. 소문난 가게는 {business.name}의 서비스입니다. ·{' '}
+        <a href={withBase('/privacy/')}>개인정보 안내</a>
+      </p>
+    </div>
+    <img class="v6-patera" src={withBase('/brand/patera-light.png')} alt="PATERA · Beyond Growth" width="600" height="158" />
   </div>
 </footer>

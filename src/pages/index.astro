@@ -3,10 +3,9 @@ import { withBase } from '../utils/urls';
 import { Image } from 'astro:assets';
 import Layout from '../layouts/Layout.astro';
 import Icon from '../components/Icon.astro';
-import EditorialArt from '../components/EditorialArt.astro';
-import FinalCTA from '../components/FinalCTA.astro';
 import cafe from '../assets/cafe-concept.png';
-import { industries, samples, steps, plans, faqs } from '../data/site';
+import LineIcon from '../components/LineIcon.astro';
+import { industries, industryDetails, heroWorks, channels, portfolio, monthPlan, faqs } from '../data/site';
 ---
 
 <Layout>
@@ -34,58 +33,73 @@ import { industries, samples, steps, plans, faqs } from '../data/site';
           </span>
         </h1>
         <p class="hero-description">
-          가게 홍보, 자꾸 뒤로 밀리고 있나요?
-          <br class="desktop-break" /> 무엇을 올릴지 고민하는 일부터 제작과 게시까지.
+          무엇을 올릴지 고민부터 촬영·제작·게시까지 맡기세요.
+          <br class="desktop-break" /> 한 달 해보고 아니다 싶으면, 직접 운영할 수 있게 세팅해 드려요.
         </p>
         <div class="hero-buttons">
-          <a href={withBase('/diagnosis/')} class="button button-lime">
-            상담 문의하기 <Icon />
+          <a href="#work" class="text-link v3-hero-link">
+            작업물 보기 <span aria-hidden="true">↘</span>
           </a>
-          <a href="#work" class="text-link">
-            만드는 콘텐츠 보기 <span aria-hidden="true">↘</span>
+          <a href="#pricing" class="text-link v3-hero-link">
+            한 달 운영 알아보기 <span aria-hidden="true">↘</span>
           </a>
         </div>
-        <div class="hero-footnote">
-          <span class="mini-line"></span>마케팅 상담 · 콘텐츠 제작 · 채널 운영
+        <div class="v3-channels" aria-label="운영 채널">
+          <span class="v3-channels-label">운영 채널</span>
+          <ul>
+            {channels.map((ch) => (
+              <li class={`v6-ch v6-ch-${ch.id}`}>
+                <span class="v6-ch-mark">
+                  {ch.logo ? (
+                    <img src={withBase(`/${ch.logo}`)} alt="" width="28" height="28" />
+                  ) : (
+                    <LineIcon name={ch.id} />
+                  )}
+                </span>
+                {ch.label}
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
-      <div class="hero-art" aria-label="가상 카페 콘텐츠 디자인 샘플">
-        <div class="hero-orbit" aria-hidden="true"></div>
-        <div class="photo-card">
-          <div class="photo-card-top">
-            <span class="tiny-flower" aria-hidden="true">
-              ✳
-            </span>
-            <span>오후의 잔</span>
-            <span class="photo-dots" aria-hidden="true">
-              •••
-            </span>
-          </div>
-          <div class="hero-photo">
-            <Image
-              src={cafe}
-              alt="따뜻한 햇살 아래 라테를 만드는 손. AI로 제작한 가상 카페 이미지."
-              width={690}
-              height={790}
-              format="webp"
-              loading="eager"
-              fetchpriority="high"
-            />
-            <div class="photo-overlay">
-              <span>오늘의 작은 쉼표</span>
-              <strong>
-                오늘은,
-                <br />
-                천천히 마셔요.
-              </strong>
+      <div class="v3-showcase" aria-label="채널별 작업물">
+        {heroWorks.map((work) => (
+          <figure class:list={['v3-work', `v3-work-${work.shape}`, `v3-ch-${work.channel}`]}>
+            <figcaption class="v3-work-chip">
+              <LineIcon name={work.channel} />
+              {work.channelLabel}
+            </figcaption>
+            <div class="v3-work-media">
+              {work.image === 'cafe' ? (
+                <Image
+                  src={cafe}
+                  alt="AI로 제작한 가상 카페 게시물 샘플"
+                  width={520}
+                  height={600}
+                  format="webp"
+                  loading="eager"
+                  fetchpriority="high"
+                />
+              ) : work.image ? (
+                <img src={withBase(`/${work.image}`)} alt={work.title.replace('\n', ' ')} loading="eager" />
+              ) : (
+                <div class="v3-placeholder" aria-hidden="true">
+                  {work.channel === 'youtube' ? (
+                    <span class="v3-play"><LineIcon name="play" /></span>
+                  ) : (
+                    <span class="v3-lines"><i></i><i></i><i></i></span>
+                  )}
+                </div>
+              )}
+              <div class="v3-work-title">
+                {work.title.split('\n').map((line) => (
+                  <span>{line}</span>
+                ))}
+              </div>
             </div>
-          </div>
-          <div class="photo-card-bottom">
-            <span>카페 SNS 디자인</span>
-            <span aria-hidden="true">↗</span>
-          </div>
-        </div>
-        <div class="hero-art-caption">자체 제작 샘플 · AI 이미지</div>
+            <span class="v3-work-status">{work.image === 'cafe' ? '자체 제작 샘플' : work.image ? '실제 작업물' : '실제 작업물 업로드 예정'}</span>
+          </figure>
+        ))}
       </div>
     </div>
     <div class="container hero-bottom">
@@ -158,9 +172,6 @@ import { industries, samples, steps, plans, faqs } from '../data/site';
                   <span>{tag}</span>
                 ))}
               </div>
-              <a class="text-link lime" href={withBase(`/diagnosis/?industry=${item.id}`)}>
-                우리 가게 상담하기 <Icon />
-              </a>
             </div>
             <div class="industry-subjects">
               <span class="subtle-label">이런 내용을 담습니다</span>
@@ -177,12 +188,52 @@ import { industries, samples, steps, plans, faqs } from '../data/site';
           </div>
         ))}
       </div>
+      <div class="v3-detail" id="industry-detail">
+        <div class="v3-detail-top" data-reveal>
+          <div>
+            <span class="subtle-label">업종별로 자세히</span>
+            <h3>우리 업종은 이렇게 소문냅니다.</h3>
+          </div>
+          <div class="v3-filter" role="group" aria-label="업종 분류">
+            <button type="button" aria-pressed="true" data-filter="all">전체</button>
+            <button type="button" aria-pressed="false" data-filter="pro">전문직</button>
+            <button type="button" aria-pressed="false" data-filter="shop">자영업</button>
+          </div>
+        </div>
+        <div class="v3-grid">
+          {industryDetails.map((item) => (
+            <article class="v3-card" data-cat={item.cat}>
+              <div class="v3-card-head">
+                <span class="v3-card-icon"><LineIcon name={item.icon} /></span>
+                <span class:list={['v3-cat', `v3-cat-${item.cat}`]}>{item.cat === 'pro' ? '전문직' : '자영업'}</span>
+              </div>
+              <h4>{item.title}</h4>
+              <p class="v3-quote">“{item.quote}”</p>
+              <span class="v3-how-label">소문난 가게가 하면</span>
+              <ul class="v3-how">
+                {item.how.map((h) => (
+                  <li>{h}</li>
+                ))}
+              </ul>
+              <div class="v3-card-ch">
+                {item.channels.map((c) => (
+                  <span>{c}</span>
+                ))}
+              </div>
+              {item.rule && <p class="v3-rule">{item.rule}</p>}
+            </article>
+          ))}
+        </div>
+        <p class="v3-more">
+          목록에 없는 업종도 운영할 수 있어요. 문의할 때 업종을 알려주세요.
+        </p>
+      </div>
     </div>
   </section>
 
   <section
     data-review-id="S4"
-    data-review-title="제작 샘플"
+    data-review-title="작업물 모음"
     id="work"
     class="section section-light work-section"
     aria-labelledby="work-heading"
@@ -191,323 +242,59 @@ import { industries, samples, steps, plans, faqs } from '../data/site';
       <div class="section-heading" data-reveal>
         <div>
           <span class="eyebrow">
-            <span>02</span> MADE FOR YOUR STORY
+            <span>02</span> PORTFOLIO
           </span>
           <h2 id="work-heading">
-            이런 콘텐츠를
+            작업물
             <br />
-            만듭니다.
+            모아보기.
           </h2>
         </div>
         <p>
-          사진과 문구, 게시했을 때의 모습까지.
+          유튜브, 인스타그램, 블로그, 플레이스까지.
           <br />
-          직접 만든 콘텐츠를 넘겨보세요.
+          채널별 작업물을 계속 추가합니다.
         </p>
       </div>
-      <div class="sample-notice">
-        <Icon name="spark" />
-        <p>실제 고객 작업이 아닌, 디자인과 문구를 보여드리기 위한 자체 제작물입니다.</p>
-      </div>
-      <div class="work-grid">
-        {samples.map((sample, i) => (
-          <a class="work-card" href={withBase(`/examples/${sample.slug}/`)} data-reveal>
-            <div class:list={['work-image', { 'cafe-work': sample.type === 'photo' }]}>
-              {sample.type === 'photo' ? (
-                <>
-                  <Image
-                    src={cafe}
-                    alt="AI로 제작한 카페 콘셉트 사진"
-                    width={800}
-                    height={670}
-                    format="webp"
-                    loading="lazy"
-                  />
-                  <div class="work-photo-type">
-                    <span>오늘의 작은 쉼표</span>
-                    <strong>
-                      커피가 있는
-                      <br />
-                      당신의 오후.
-                    </strong>
-                  </div>
-                </>
+      <div class="v3-portfolio">
+        {portfolio.map((item) => (
+          <figure class:list={['v3-pf', `v3-pf-${item.shape}`]} data-reveal>
+            <div class="v3-pf-media">
+              {item.image === 'cafe' ? (
+                <Image src={cafe} alt="AI로 제작한 가상 카페 게시물 샘플" width={600} height={600} format="webp" loading="lazy" />
+              ) : item.image ? (
+                <img src={withBase(`/${item.image}`)} alt={item.channelLabel} loading="lazy" />
               ) : (
-                <EditorialArt />
+                <div class="v3-pf-empty" aria-hidden="true">
+                  <LineIcon name={item.channel} />
+                </div>
               )}
-              <span class="sample-badge">자체 제작</span>
-              <span class="work-open" aria-hidden="true">
-                ↗
+              {item.title && (
+                <div class="v3-pf-title">
+                  {item.title.split('\n').map((line) => (
+                    <span>{line}</span>
+                  ))}
+                </div>
+              )}
+            </div>
+            <figcaption>
+              <span class="v3-pf-ch">
+                <LineIcon name={item.channel} />
+                {item.channelLabel}
               </span>
-            </div>
-            <div class="work-meta">
-              <span>{sample.category}</span>
-              <span>0{i + 1}</span>
-            </div>
-            <h3>{sample.title.replace('\n', ' ')}</h3>
-            <p>{sample.subtitle}</p>
-          </a>
+              <span class="v3-pf-status">
+                {item.image === 'cafe' ? '자체 제작 샘플' : item.image ? '실제 작업물' : '업로드 예정'}
+              </span>
+            </figcaption>
+          </figure>
         ))}
-      </div>
-      <div class="review-only owner-note">
-        소유자 확인: 실제 운영 사례는 수행 자료와 공개 동의를 확보한 뒤 이 영역에 추가합니다. 지금은
-        자체 제작물만 표시합니다.
-      </div>
-    </div>
-  </section>
-
-  <section
-    id="services"
-    class="section section-light services-section"
-    aria-labelledby="services-heading"
-  >
-    <div class="container services-grid">
-      <div class="services-intro" data-reveal>
-        <span class="eyebrow">
-          <span>03</span> WHAT WE DO
-        </span>
-        <h2 id="services-heading">
-          직접 운영하고 싶다면.
-          <br />
-          맡기고 싶다면.
-        </h2>
-        <p>
-          사장님이 직접 할 일과
-          <br />
-          맡길 일을 나눠보세요.
-        </p>
-        <div class="service-sketch" aria-hidden="true">
-          <span>사장님의 전문성</span>
-          <Icon name="plus" />
-          <span>우리의 실행력</span>
-          <svg viewBox="0 0 250 80">
-            <path d="M10 12c45 54 128 47 212 20m-12-7 14 6-5 16" />
-          </svg>
-        </div>
-      </div>
-      <div class="service-options">
-        <article
-          data-review-id="S5"
-          data-review-title="마케팅 상담"
-          class="service-row"
-          data-reveal
-        >
-          <div class="service-number">01 / CONSULTING</div>
-          <h3>
-            무엇부터 바꿀지
-            <br />
-            <span>막막하다면.</span>
-          </h3>
-          <p>
-            검색부터 문의까지, 고객이 어디서 멈추는지 살펴봅니다. 채널별로 바꿀 내용과 게시할 주제를
-            안내합니다.
-          </p>
-          <a href={withBase('/diagnosis/?help=consulting')} class="text-link">
-            마케팅 상담 문의 <Icon />
-          </a>
-        </article>
-        <article
-          data-review-id="S6"
-          data-review-title="콘텐츠 운영"
-          class="service-row"
-          data-reveal
-        >
-          <div class="service-number">02 / MANAGEMENT</div>
-          <h3>
-            올릴 건 많은데
-            <br />
-            <span>시간이 없다면.</span>
-          </h3>
-          <p>
-            게시물 주제 선정, 사진과 글 제작, 업로드까지. 맡길 채널과 작업을 정하고 콘텐츠 운영을
-            의뢰할 수 있습니다.
-          </p>
-          <a href={withBase('/diagnosis/?help=management')} class="text-link">
-            콘텐츠 운영 문의 <Icon />
-          </a>
-        </article>
-      </div>
-    </div>
-    <div data-review-id="S7" data-review-title="역할 분담" class="container role-table" data-reveal>
-      <div>
-        <span>WE DO</span>
-        <h3>소문난 가게가 하는 일</h3>
-        <p>콘텐츠 기획 · 제작 · 운영 내용 공유</p>
-      </div>
-      <div>
-        <span>TOGETHER</span>
-        <h3>사장님과 함께하는 일</h3>
-        <p>사업 정보 확인 · 자료 제공 · 게시 전 승인</p>
-      </div>
-      <p class="role-note review-only">
-        서비스와 역할은 제안 구성입니다. 실제 제공 범위는 확인 후 확정합니다.
-      </p>
-    </div>
-  </section>
-
-  <section
-    data-review-id="S8"
-    data-review-title="진행 방식"
-    id="process"
-    class="section section-dark process-section"
-    aria-labelledby="process-heading"
-  >
-    <div class="container">
-      <div class="section-heading" data-reveal>
-        <div>
-          <span class="eyebrow">
-            <span>04</span> NO GUESSWORK
-          </span>
-          <h2 id="process-heading">
-            어떤 일을 했는지
-            <br />
-            보여드립니다.
-          </h2>
-        </div>
-        <p>
-          제작물은 게시 전에 확인하고,
-          <br />
-          운영한 내용은 보고서로 살펴봅니다.
-        </p>
-      </div>
-      <div class="process-grid">
-        <div class="process-steps">
-          {steps.map((step, i) => (
-            <article class="process-step" data-reveal>
-              <span class="step-no">0{i + 1}</span>
-              <div>
-                <span class="step-tag">{step.tag}</span>
-                <h3>{step.title}</h3>
-                <p>{step.text}</p>
-              </div>
-            </article>
-          ))}
-        </div>
-        <div data-review-id="S9" data-review-title="보고서" class="report-preview" data-reveal>
-          <div class="report-top">
-            <span class="report-logo">
-              <Icon name="megaphone" /> 소문난 가게
-            </span>
-            <span class="outline-badge">보고서 예시</span>
-          </div>
-          <h3>
-            이번에 한 일.
-            <br />
-            다음에 할 일.
-          </h3>
-          <p class="report-description">게시물과 운영 내역을 한곳에서 확인합니다.</p>
-          <div data-tabs class="report-tabs">
-            <div role="tablist" class="tab-list" aria-label="보고서 예시">
-              <button
-                role="tab"
-                id="report-tab-work"
-                aria-controls="report-work"
-                aria-selected="true"
-              >
-                진행한 작업
-              </button>
-              <button
-                role="tab"
-                id="report-tab-review"
-                aria-controls="report-review"
-                aria-selected="false"
-                tabindex="-1"
-              >
-                확인할 내용
-              </button>
-              <button
-                role="tab"
-                id="report-tab-next"
-                aria-controls="report-next"
-                aria-selected="false"
-                tabindex="-1"
-              >
-                다음 제안
-              </button>
-            </div>
-            <div role="tabpanel" id="report-work" aria-labelledby="report-tab-work" tabindex="0">
-              <div class="report-task">
-                <span class="task-check">
-                  <Icon name="check" />
-                </span>
-                <div>
-                  <strong>가게 소개 콘텐츠 기획</strong>
-                  <span>우리 가게를 소개할 주제와 메시지</span>
-                </div>
-                <span class="task-status">예시</span>
-              </div>
-              <div class="report-task">
-                <span class="task-check">
-                  <Icon name="check" />
-                </span>
-                <div>
-                  <strong>메뉴·공간 게시물 제작</strong>
-                  <span>사진 구성과 게시물 문구</span>
-                </div>
-                <span class="task-status">예시</span>
-              </div>
-              <div class="report-task">
-                <span class="task-check">
-                  <Icon name="check" />
-                </span>
-                <div>
-                  <strong>채널 기본 정보 정리</strong>
-                  <span>방문 전 고객에게 필요한 정보</span>
-                </div>
-                <span class="task-status">예시</span>
-              </div>
-            </div>
-            <div
-              role="tabpanel"
-              id="report-review"
-              aria-labelledby="report-tab-review"
-              hidden
-              tabindex="0"
-            >
-              <div class="report-text">
-                <span>살펴볼 질문</span>
-                <h4>
-                  고객이 필요한 정보를
-                  <br />
-                  쉽게 찾을 수 있었나요?
-                </h4>
-                <p>
-                  영업시간과 메뉴 정보가 정확한지, 댓글과 문의에 어떤 질문이 반복되는지 살펴봅니다.
-                </p>
-              </div>
-            </div>
-            <div
-              role="tabpanel"
-              id="report-next"
-              aria-labelledby="report-tab-next"
-              hidden
-              tabindex="0"
-            >
-              <div class="report-text">
-                <span>다음 콘텐츠 제안</span>
-                <h4>
-                  처음 방문하는 손님을 위한
-                  <br />
-                  작은 안내서를 만들어볼까요?
-                </h4>
-                <p>
-                  오시는 길, 이용 방법, 자주 묻는 질문을 한 게시물로 만들면 처음 방문하는 손님에게
-                  도움이 됩니다.
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="report-foot">
-            <span class="status-dot"></span>제작·운영 보고서의 구성 예시입니다.
-          </div>
-        </div>
       </div>
     </div>
   </section>
 
   <section
     data-review-id="S10"
-    data-review-title="요금과 범위"
+    data-review-title="한 달 운영과 요금"
     id="pricing"
     class="section section-light pricing-section"
     aria-labelledby="pricing-heading"
@@ -516,46 +303,65 @@ import { industries, samples, steps, plans, faqs } from '../data/site';
       <div class="section-heading" data-reveal>
         <div>
           <span class="eyebrow">
-            <span>05</span> THE RIGHT SCOPE
+            <span>03</span> ONE MONTH FIRST
           </span>
           <h2 id="pricing-heading">
-            어디까지 맡길지
+            한 달만
             <br />
-            먼저 정하세요.
+            맡겨보세요.
           </h2>
         </div>
         <p>
-          상담부터 제작과 게시까지.
+          아니다 싶으면, 사장님이 직접 운영할 수 있게{' '}
           <br />
-          필요한 작업에 맞춰 견적을 문의하세요.
+          세팅하고 방법까지 알려드리고 마무리합니다.
         </p>
       </div>
-      <div class="pricing-grid">
-        {plans.map((plan, i) => (
-          <article class:list={['plan-card', { 'plan-accent': i === 1 }]} data-reveal>
-            <span class="plan-kicker">{plan.label}</span>
-            <h3>{plan.title}</h3>
-            <div class="plan-price">개별 견적 안내</div>
-            <ul>
-              {plan.items.map((item) => (
-                <li>
-                  <Icon name="check" />
-                  {item}
-                </li>
-              ))}
-            </ul>
-            <p>{plan.note}</p>
-            <a
-              class:list={['button', i === 1 ? 'button-lime' : 'button-outline']}
-              href={withBase(`/diagnosis/?help=${plan.id}`)}
-            >
-              상담 문의하기 <Icon />
-            </a>
-          </article>
-        ))}
+      <div class="v3-plan">
+        <article class="v3-plan-card" data-reveal>
+          <span class="plan-kicker">첫 한 달 운영</span>
+          <div class="v3-plan-price">{monthPlan.price}</div>
+          <p class="v3-plan-terms">{monthPlan.terms}</p>
+          <ul>
+            {monthPlan.includes.map((item) => (
+              <li>
+                <Icon name="check" />
+                {item}
+              </li>
+            ))}
+          </ul>
+        </article>
+        <div class="v3-plan-flow">
+          <ol class="v3-weeks" data-reveal>
+            {monthPlan.weeks.map((w) => (
+              <li>
+                <span class="v3-week-label">{w.label}</span>
+                <div>
+                  <h3>{w.title}</h3>
+                  <p>{w.text}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+          <div class="v3-after" data-reveal>
+            <span class="v3-after-label">한 달 뒤, 사장님이 고르세요</span>
+            <div class="v3-after-grid">
+              <div class="v3-after-card v3-after-keep">
+                <span>A</span>
+                <h3>계속 맡기기</h3>
+                <p>반응이 좋으면 다음 달도 그대로 운영합니다. 보고서를 보고 채널과 작업량을 조정해요.</p>
+              </div>
+              <div class="v3-after-card">
+                <span>B</span>
+                <h3>직접 운영하기</h3>
+                <p>계정 세팅, 게시 캘린더, 촬영·글쓰기 방법, 리뷰 답글 예시를 넘겨드리고 사용법을 알려드려요.</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <p class="price-note">
-        견적에서 확인할 항목: 제작 수량, 촬영비, 광고비, 수정 횟수, 계약 기간, 부가세
+        견적에서 확인할 항목: 운영 채널 수, 제작 수량, 촬영 여부, 광고비, 부가세
       </p>
     </div>
   </section>
@@ -570,7 +376,7 @@ import { industries, samples, steps, plans, faqs } from '../data/site';
     <div class="container faq-grid">
       <div data-reveal>
         <span class="eyebrow">
-          <span>06</span> GOOD QUESTIONS
+          <span>04</span> GOOD QUESTIONS
         </span>
         <h2 id="faq-heading">자주 묻는 질문</h2>
         <p>문의 전에 궁금한 내용을 확인해보세요.</p>
@@ -591,5 +397,4 @@ import { industries, samples, steps, plans, faqs } from '../data/site';
       </div>
     </div>
   </section>
-  <FinalCTA />
 </Layout>
